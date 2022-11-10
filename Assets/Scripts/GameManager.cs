@@ -4,28 +4,44 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public enum Difficulty { Easy = 0, Medium = 1, Hard = 2 };
+    public static Difficulty difficulty;
+
     public static float score;
     public static float highscore;
     public static bool isPaused;
     public static int attempts;
     private float startTime;
 
+    public UIScript uiScript;
+
     // Start is called before the first frame update
     void Awake()
     {
         isPaused = true;
-        PlayerPrefs.GetInt("Attempts", 0);
-        PlayerPrefs.GetFloat("HighScore", highscore);
+        Time.timeScale = 0;
+        attempts = PlayerPrefs.GetInt("Attempts", 0);
+        highscore = PlayerPrefs.GetFloat("HighScore", 0);
+        difficulty = (Difficulty)PlayerPrefs.GetInt("Difficulty", 0);
         score = 0;
+
+        uiScript = GameObject.FindObjectOfType(typeof(UIScript)) as UIScript;
+        uiScript.MainMenu();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (!isPaused)
+            score = Time.time - startTime;
     }
 
-    void Play()
+    public void SetDifficulty(int dif)
+    {
+        difficulty = (Difficulty)dif;
+    }
+
+    public void Play()
     {
         startTime = Time.time;
 
@@ -33,15 +49,18 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    void Pause()
+    // actually only called when the game is over
+    public void Pause()
     {
         isPaused = true;
         Time.timeScale = 0;
+
         score = Time.time - startTime;
 
         attempts += 1;
         if (score > highscore)
             highscore = score;
+        uiScript.GameOver();
 
         PlayerPrefs.SetInt("Attempts", attempts);
         PlayerPrefs.SetFloat("HighScore", highscore);

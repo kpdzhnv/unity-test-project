@@ -36,13 +36,6 @@ public class LevelGenerator : MonoBehaviour
 
         minHeight = -2.5f;
         maxHeight = 2.5f;
-
-        if (difficulty == Difficulty.Medium)
-            InitializeMedium();
-        else if (difficulty == Difficulty.Hard)
-            InitializeHard();
-        else
-            InitializeEasy();
     }
 
     void Update()
@@ -54,24 +47,11 @@ public class LevelGenerator : MonoBehaviour
             {
                 Instantiate(bordersPrefab, lastBordersPosition, Quaternion.identity);
                 lastBordersPosition = lastBordersPosition + Vector3.forward * 10;
+                Instantiate(obstaclePrefab, lastObstaclePosition, Quaternion.identity);
+                lastObstaclePosition.z += N;
+                float pos = Random.Range(minHeight, maxHeight);
+                lastObstaclePosition.y = pos;
             }
-            Instantiate(obstaclePrefab, lastObstaclePosition, Quaternion.identity);
-            lastObstaclePosition.z += N;
-            float pos = Random.Range(minHeight, maxHeight);
-            lastObstaclePosition.y = pos;
         }
-    }
-
-    void InitializeEasy()
-    {
-        N = 15;
-    }
-    void InitializeMedium()
-    {
-        N = 12;
-    }
-    void InitializeHard()
-    {
-        N = 10;
     }
 }

@@ -12,8 +12,8 @@ public class LevelElementDestruction : MonoBehaviour
 
     void Update()
     {
-        // destroy when invisible for the player
+        // destroy when behind the player
         if (transform.position.z < player.position.z - 10)
-            Destroy(this.gameObject);
+            Destroy(gameObject);
     }
 }

@@ -7,29 +7,35 @@ using TMPro;
 public class UIScript : MonoBehaviour
 {
     public TextMeshProUGUI inGameInfo;
+    public TextMeshProUGUI inGameDifficulty;
     public GameObject mainMenu;
     public GameObject gameoverMenu;
 
-    public TextMeshProUGUI gameoverInfo; // score + highscore + attempts
+    public TextMeshProUGUI gameoverInfo; // score + \n + highscore + \n + attempts
 
-    private void Awake()
+    public GameManager gmScript;
+
+    void Start()
     {
-        MainMenu();
+        gmScript = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;
     }
 
     // for Difficulty buttons
     public void SetDifficulty(int difficulty)
     {
         PlayerPrefs.SetInt("Difficulty", difficulty);
+        gmScript.SetDifficulty(difficulty);
     }
 
     // Start and PlayAgain buttons
     public void StartGame()
     {
+        gmScript.Play();
 
         mainMenu.SetActive(false);
         gameoverMenu.SetActive(false);
         inGameInfo.enabled = true;
+        inGameDifficulty.enabled = true;
     }
 
     public void MainMenu()
@@ -37,6 +43,7 @@ public class UIScript : MonoBehaviour
         mainMenu.SetActive(true);
         gameoverMenu.SetActive(false);
         inGameInfo.enabled = false;
+        inGameDifficulty.enabled = false;
     }
 
     public void GameOver()
@@ -44,9 +51,9 @@ public class UIScript : MonoBehaviour
         mainMenu.SetActive(false);
         gameoverMenu.SetActive(true);
         inGameInfo.enabled = false;
+        inGameDifficulty.enabled = false;
 
         gameoverInfo.text = GameManager.score + "\n" + GameManager.highscore + "\n" + GameManager.attempts;
-        // pause
     }
 
 
@@ -56,6 +63,7 @@ public class UIScript : MonoBehaviour
         if (!GameManager.isPaused)
         {
             inGameInfo.text = "score: " + GameManager.score.ToString("F2");
+            inGameDifficulty.text = GameManager.difficulty.ToString();
         }
     }
 }

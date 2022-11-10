@@ -7,10 +7,6 @@ public class PlayerMovement : MonoBehaviour
 {
     public UIScript script;
 
-    enum Difficulty { Easy = 0, Medium = 1, Hard = 2 };
-    [SerializeField]
-    private Difficulty difficulty;
-
     public int speedForward;
     public float speedVertical;
     private Rigidbody rb;
@@ -19,16 +15,18 @@ public class PlayerMovement : MonoBehaviour
     private int interval;
     private float speedIncrease;
 
+    public GameManager gmScript;
+
     void Start()
     {
-        
+        gmScript = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;
+
         //initialization 
         rb = transform.GetComponent<Rigidbody>();
-        difficulty = (Difficulty)PlayerPrefs.GetInt("Difficulty", 1);
 
-        if (difficulty == Difficulty.Medium)
+        if (GameManager.difficulty == GameManager.Difficulty.Medium)
             InitializeMedium();
-        else if (difficulty == Difficulty.Hard)
+        else if (GameManager.difficulty == GameManager.Difficulty.Hard)
             InitializeHard();
         else
             InitializeEasy();
@@ -52,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         rb.AddForce(Vector3.forward * speedForward);
-        rb.AddForce(Vector3.down * speedVertical);
+        rb.AddForce(Vector3.down * speedVertical * 5);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -96,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void GameOver()
     {
-
+        gmScript.Pause();
         Debug.Log("Game Over");
     }
 }
