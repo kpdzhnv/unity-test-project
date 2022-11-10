@@ -30,8 +30,8 @@ public class LevelGenerator : MonoBehaviour
 
     void Start()
     {
-        lastBordersPosition = new Vector3(0, 0, 0);
-        lastObstaclePosition = new Vector3(0, 0, 20);
+        lastBordersPosition = player.transform.position;
+        lastObstaclePosition = player.transform.position + new Vector3(0, 0, 20);
         N = 15; 
 
         minHeight = -2.5f;
@@ -43,7 +43,7 @@ public class LevelGenerator : MonoBehaviour
         if (!GameManager.isPaused)
         {
             // instantiate objects for the level
-            if (Vector3.Distance(lastBordersPosition, player.transform.position) < 100)
+            if (Mathf.Abs(lastBordersPosition.z - player.transform.position.z) < 100)
             {
                 Instantiate(bordersPrefab, lastBordersPosition, Quaternion.identity);
                 lastBordersPosition = lastBordersPosition + Vector3.forward * 10;
@@ -52,6 +52,11 @@ public class LevelGenerator : MonoBehaviour
                 float pos = Random.Range(minHeight, maxHeight);
                 lastObstaclePosition.y = pos;
             }
+        }
+        else
+        {
+            lastBordersPosition = new Vector3(0, 0, player.transform.position.z);
+            lastObstaclePosition = new Vector3(0, 0, player.transform.position.z + 20);
         }
     }
 }

@@ -72,18 +72,18 @@ public class PlayerMovement : MonoBehaviour
 
     void InitializeMedium()
     {
-        speedForward = 12;
+        speedForward = 15;
         speedVertical = 4;
 
         // hardcoded 15 seconds for speed increase
-        interval = 12;
+        interval = 15;
         speedIncrease = 0.5f;
         lastTimeSpeedUp = 0;
     }
 
     void InitializeHard()
     {
-        speedForward = 15;
+        speedForward = 20;
         speedVertical = 4;
 
         // hardcoded 15 seconds for speed increase
@@ -94,7 +94,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void GameOver()
     {
+        rb.velocity = Vector3.zero;
+        transform.position = new Vector3(0, 0, transform.position.z);
         gmScript.Pause();
-        Debug.Log("Game Over");
+        Debug.Log(":c");
     }
 }

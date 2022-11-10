@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public enum Difficulty { Easy = 0, Medium = 1, Hard = 2 };
     public static Difficulty difficulty;
 
-    public static float score;
+    public static int score;
     public static float highscore;
     public static bool isPaused;
     public static int attempts;
@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         isPaused = true;
         Time.timeScale = 0;
         attempts = PlayerPrefs.GetInt("Attempts", 0);
-        highscore = PlayerPrefs.GetFloat("HighScore", 0);
+        highscore = PlayerPrefs.GetInt("HighScore", 0);
         difficulty = (Difficulty)PlayerPrefs.GetInt("Difficulty", 0);
         score = 0;
 
@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (!isPaused)
-            score = Time.time - startTime;
+            score = (int)((Time.time - startTime) * 100);
     }
 
     public void SetDifficulty(int dif)
@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
 
         isPaused = false;
         Time.timeScale = 1;
+        uiScript.WhilePlayInfo();
     }
 
     // actually only called when the game is over
@@ -55,7 +56,7 @@ public class GameManager : MonoBehaviour
         isPaused = true;
         Time.timeScale = 0;
 
-        score = Time.time - startTime;
+        score = (int)((Time.time - startTime) * 100);
 
         attempts += 1;
         if (score > highscore)

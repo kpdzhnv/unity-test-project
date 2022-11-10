@@ -20,6 +20,15 @@ public class UIScript : MonoBehaviour
         gmScript = GameObject.FindObjectOfType(typeof(GameManager)) as GameManager;
     }
 
+    void Update()
+    {
+        if (!GameManager.isPaused)
+        {
+            inGameInfo.text = "score: " + GameManager.score;
+            inGameDifficulty.text = GameManager.difficulty.ToString();
+        }
+    }
+
     // for Difficulty buttons
     public void SetDifficulty(int difficulty)
     {
@@ -31,7 +40,10 @@ public class UIScript : MonoBehaviour
     public void StartGame()
     {
         gmScript.Play();
+    }
 
+    public void WhilePlayInfo()
+    {
         mainMenu.SetActive(false);
         gameoverMenu.SetActive(false);
         inGameInfo.enabled = true;
@@ -54,16 +66,5 @@ public class UIScript : MonoBehaviour
         inGameDifficulty.enabled = false;
 
         gameoverInfo.text = GameManager.score + "\n" + GameManager.highscore + "\n" + GameManager.attempts;
-    }
-
-
-
-    void Update()
-    {
-        if (!GameManager.isPaused)
-        {
-            inGameInfo.text = "score: " + GameManager.score.ToString("F2");
-            inGameDifficulty.text = GameManager.difficulty.ToString();
-        }
     }
 }
